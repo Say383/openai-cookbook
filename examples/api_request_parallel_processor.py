@@ -147,7 +147,7 @@ async def process_api_requests_from_file(
     next_request = None  # variable to hold the next request to call
 
     # initialize available capacity counts
-    available_request_capacity = max_requests_per_minute
+    available_request_capacity = float(max_requests_per_minute)
     available_token_capacity = max_tokens_per_minute
     last_update_time = time.time()
 
@@ -261,7 +261,7 @@ async def process_api_requests_from_file(
         logging.info(
             f"""Parallel processing complete. Results saved to {save_filepath}"""
         )
-        if status_tracker.num_tasks_failed > 0:
+        if status_tracker.num_rate_limit_errors > 0 or status_tracker.num_tasks_failed > 0:
             logging.warning(
                 f"{status_tracker.num_tasks_failed} / {status_tracker.num_tasks_started} requests failed. Errors logged to {save_filepath}."
             )
